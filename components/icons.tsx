@@ -1,3 +1,6 @@
+//import and export all Lucide icons
+export * from 'lucide-react';
+
 export const BotIcon = () => {
   return (
     <svg

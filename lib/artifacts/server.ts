@@ -2,6 +2,8 @@ import { codeDocumentHandler } from '@/artifacts/code/server';
 import { imageDocumentHandler } from '@/artifacts/image/server';
 import { sheetDocumentHandler } from '@/artifacts/sheet/server';
 import { textDocumentHandler } from '@/artifacts/text/server';
+import { pixiDocumentHandler } from '@/artifacts/pixi/server';
+import { createAgenticDocumentHandler } from '@/lib/ai/agents/agentic-handler';
 import type { ArtifactKind } from '@/components/artifact';
 import type { Document } from '../db/schema';
 import { saveDocument } from '../db/queries';
@@ -89,12 +91,25 @@ export function createDocumentHandler<T extends ArtifactKind>(config: {
 
 /*
  * Use this array to define the document handlers for each artifact kind.
+ * Enhanced with agentic capabilities for superior quality and autonomous improvement.
  */
 export const documentHandlersByArtifactKind: Array<DocumentHandler> = [
   textDocumentHandler,
   codeDocumentHandler,
   imageDocumentHandler,
   sheetDocumentHandler,
+  pixiDocumentHandler, // Now uses agentic handler
 ];
 
-export const artifactKinds = ['text', 'code', 'image', 'sheet'] as const;
+/*
+ * Agentic document handlers for enhanced AI-driven artifact creation
+ */
+export const agenticDocumentHandlers = {
+  text: createAgenticDocumentHandler('text'),
+  code: createAgenticDocumentHandler('code'),
+  image: createAgenticDocumentHandler('image'),
+  sheet: createAgenticDocumentHandler('sheet'),
+  pixi: createAgenticDocumentHandler('pixi'),
+};
+
+export const artifactKinds = ['text', 'code', 'image', 'sheet', 'pixi'] as const;

@@ -1,8 +1,10 @@
 import { myProvider } from '@/lib/ai/providers';
 import { createDocumentHandler } from '@/lib/artifacts/server';
+import { createAgenticDocumentHandler } from '@/lib/ai/agents/agentic-handler';
 import { experimental_generateImage } from 'ai';
 
-export const imageDocumentHandler = createDocumentHandler<'image'>({
+// Legacy handler for backward compatibility
+const legacyImageDocumentHandler = createDocumentHandler<'image'>({
   kind: 'image',
   onCreateDocument: async ({ title, dataStream }) => {
     let draftContent = '';
@@ -43,3 +45,6 @@ export const imageDocumentHandler = createDocumentHandler<'image'>({
     return draftContent;
   },
 });
+
+// Enhanced agentic handler for image artifacts
+export const imageDocumentHandler = createAgenticDocumentHandler('image');

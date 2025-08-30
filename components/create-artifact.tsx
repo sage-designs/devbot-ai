@@ -27,6 +27,11 @@ export type ArtifactToolbarContext = {
   sendMessage: UseChatHelpers<ChatMessage>['sendMessage'];
 };
 
+export type ArtifactContentContext<M = any> = ArtifactContent<M> & {
+  sendMessage?: UseChatHelpers<ChatMessage>['sendMessage'];
+  documentId?: string;
+};
+
 export type ArtifactToolbarItem = {
   description: string;
   icon: ReactNode;

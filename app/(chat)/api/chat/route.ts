@@ -21,8 +21,14 @@ import { convertToUIMessages, generateUUID } from '@/lib/utils';
 import { generateTitleFromUserMessage } from '../../actions';
 import { createDocument } from '@/lib/ai/tools/create-document';
 import { updateDocument } from '@/lib/ai/tools/update-document';
+import { createEnhancedDocument } from '@/lib/ai/tools/enhanced-create-document';
+import { updateEnhancedDocument } from '@/lib/ai/tools/enhanced-update-document';
 import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
 import { getWeather } from '@/lib/ai/tools/get-weather';
+import { createAgenticDocument } from '@/lib/ai/tools/create-agentic-document';
+import { evaluateArtifact } from '@/lib/ai/tools/evaluate-artifact';
+import { optimizeArtifact } from '@/lib/ai/tools/optimize-artifact';
+import { createAiImageEditTool } from '@/lib/ai/tools/ai-image-edit';
 import { isProductionEnvironment } from '@/lib/constants';
 import { myProvider } from '@/lib/ai/providers';
 import { entitlementsByUserType } from '@/lib/ai/entitlements';
@@ -161,19 +167,36 @@ export async function POST(request: Request) {
               ? []
               : [
                   'getWeather',
-                  'createDocument',
-                  'updateDocument',
+                  'createEnhancedDocument',
+                  'updateEnhancedDocument',
                   'requestSuggestions',
+                  'createAgenticDocument',
+                  'evaluateArtifact',
+                  'optimizeArtifact',
                 ],
           experimental_transform: smoothStream({ chunking: 'word' }),
           tools: {
             getWeather,
-            createDocument: createDocument({ session, dataStream }),
-            updateDocument: updateDocument({ session, dataStream }),
+            createEnhancedDocument: createEnhancedDocument({ 
+              session, 
+              dataStream, 
+              chatId: id,
+              messageId: message.id 
+            }),
+            updateEnhancedDocument: updateEnhancedDocument({ 
+              session, 
+              dataStream, 
+              chatId: id,
+              messageId: message.id 
+            }),
             requestSuggestions: requestSuggestions({
               session,
               dataStream,
             }),
+            createAgenticDocument: createAgenticDocument({ session, dataStream }),
+            evaluateArtifact: evaluateArtifact({ session, dataStream }),
+            optimizeArtifact: optimizeArtifact({ session, dataStream }),
+            aiImageEdit: createAiImageEditTool({ session, dataStream }),
           },
           experimental_telemetry: {
             isEnabled: isProductionEnvironment,
